@@ -1,0 +1,107 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="First Option"
+        android:id="@+id/textViewPrimeira"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="R$"
+        android:id="@+id/textViewPreco1"
+        android:layout_marginTop="36dp"
+        android:layout_below="@+id/textViewPrimeira"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/firstPrice"
+        android:layout_alignTop="@+id/textViewPreco1"
+        android:layout_toRightOf="@+id/textViewPreco1"
+        android:layout_alignRight="@+id/textViewPrimeira"
+        android:layout_alignEnd="@+id/textViewPrimeira" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="mL"
+        android:id="@+id/textViewPmL"
+        android:layout_alignTop="@+id/firstPrice"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/firstML"
+        android:layout_alignBottom="@+id/firstPrice"
+        android:layout_toRightOf="@+id/textViewPmL" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Second Option"
+        android:id="@+id/textViewSegundaOpcao"
+        android:layout_below="@+id/firstPrice"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="27dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="R$"
+        android:id="@+id/textViewRS"
+        android:layout_below="@+id/textViewSegundaOpcao"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="36dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/secondPrice"
+        android:layout_alignTop="@+id/textViewRS"
+        android:layout_alignLeft="@+id/firstPrice"
+        android:layout_alignStart="@+id/firstPrice"
+        android:layout_alignRight="@+id/firstPrice"
+        android:layout_alignEnd="@+id/firstPrice" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="mL"
+        android:id="@+id/textView"
+        android:layout_alignBottom="@+id/textViewRS"
+        android:layout_alignLeft="@+id/textViewPmL"
+        android:layout_alignStart="@+id/textViewPmL" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/secondML"
+        android:layout_alignTop="@+id/textView"
+        android:layout_alignLeft="@+id/firstML"
+        android:layout_alignStart="@+id/firstML" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Compare"
+        android:id="@+id/button"
+        android:layout_below="@+id/secondML"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="89dp" />
+
+</RelativeLayout>
