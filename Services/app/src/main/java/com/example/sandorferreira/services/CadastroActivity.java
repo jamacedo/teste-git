@@ -1,6 +1,6 @@
 package com.example.sandorferreira.services;
 
-import android.app.Activity;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -16,8 +16,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -32,11 +30,9 @@ import com.parse.ParseObject;
 import com.parse.SaveCallback;
 
 import java.nio.ByteBuffer;
-import java.util.List;
-import java.util.jar.Manifest;
 
 
-public class CadastroActivity extends AppCompatActivity {
+public class CadastroActivity extends AppCompatActivity{
 
     public static final String TAG = "CadastroActivity";
     private static final int REQUEST_CAMERA = 0;
@@ -83,10 +79,11 @@ public class CadastroActivity extends AppCompatActivity {
                 final ProgressDialog dialog = ProgressDialog.show(CadastroActivity.this, "",
                         "Enviando. Aguarde...", true);
 
-                if(checkBox.isChecked() && latitude!=0 && longitude !=0){
+
+                if (checkBox.isChecked() && latitude != 0 && longitude != 0) {
                     cadastro.put("latLong", new ParseGeoPoint(latitude, longitude));
                 }
-                if(filePhoto!=null){
+                if (filePhoto != null) {
                     cadastro.put("foto", new ParseFile(filePhoto));
                 }
 
@@ -112,7 +109,7 @@ public class CadastroActivity extends AppCompatActivity {
         //requisitar permissao antes da call
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if(takePictureIntent.resolveActivity(getPackageManager()) != null){
-            startActivityForResult(takePictureIntent,REQUEST_IMAGE_CAPTURE);
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
 
@@ -155,6 +152,7 @@ public class CadastroActivity extends AppCompatActivity {
             Log.i(TAG, "LOCATION: Pemissao ja garantida. Mostrar coordenadas");
             LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             Criteria criteria = new Criteria();
+            criteria.setAccuracy(Criteria.ACCURACY_LOW);
             String provider = locationManager.getBestProvider(criteria, false);
             location = locationManager.getLastKnownLocation(provider);
 
@@ -164,7 +162,6 @@ public class CadastroActivity extends AppCompatActivity {
                 Log.d("CursoAndroid", "lat: " + location.getLatitude() + " long: " +
                         location.getLongitude());
             } else {
-
                 Log.d("CursoAndroid", "Lat e Long indiponiveis");
             }
 
@@ -227,9 +224,6 @@ public class CadastroActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CAMERA}, REQUEST_CAMERA);
         }
     }
-
-
-
 
 }
 
