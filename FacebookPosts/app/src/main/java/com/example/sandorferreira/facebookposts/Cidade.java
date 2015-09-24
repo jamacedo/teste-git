@@ -3,25 +3,26 @@ package com.example.sandorferreira.facebookposts;
 /**
  * Created by sandorferreira on 23/09/15.
  */
-import java.util.Properties;
+
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 import javax.annotation.Generated;
 
 @Generated("org.jsonschema2pojo")
 public class Cidade {
 
-    public String info;
-    public Properties properties;
+    @SerializedName("itens")
+    List<Itens> listaDeItens;
 
-    public void setInfo(String text){
-        info = text;
-    }
-    public String getInfo(){
-        return info;
+    public List<Itens> getListaDeItens() {
+        return listaDeItens;
     }
 
-    public Properties getProperties(){
-        return properties;
+    public void setListaDeItens(List<Itens> listaDeItens) {
+
+        this.listaDeItens = listaDeItens;
     }
 
 }

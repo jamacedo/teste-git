@@ -1,6 +1,8 @@
 package com.example.sandorferreira.facebookposts;
 
-import retrofit.Callback;
+import java.util.List;
+
+import retrofit.Call;
 import retrofit.http.GET;
 import retrofit.http.Path;
 
@@ -10,5 +12,5 @@ import retrofit.http.Path;
 
 public interface PrimeSpot {
     @GET("/ws/{cidade}")
-    void getCidade(@Path("cidade") String cidade, Callback<Cidade> cb);
+    Call<Cidade> getCidade(@Path("cidade") String cidade);
 }
