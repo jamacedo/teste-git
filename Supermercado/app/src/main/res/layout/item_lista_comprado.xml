@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:id="@+id/layoutItemComprado"
+    android:layout_width="match_parent"
+    android:descendantFocusability="blocksDescendants"
+    android:layout_height="wrap_content">
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/checkBoxItem"
+        android:checked="false" />
+
+    <TextView
+        android:layout_width="252dp"
+        android:layout_height="match_parent"
+        android:text="Nome do Item "
+        android:id="@+id/tvNomeComprado"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:focusable="false"
+        android:clickable="false"
+        android:focusableInTouchMode="false"
+        android:gravity="center" />
+
+    <ImageButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_action_remove"
+        android:id="@+id/imButtonComprado"
+        android:backgroundTint="#000000" />
+
+</LinearLayout>
+
