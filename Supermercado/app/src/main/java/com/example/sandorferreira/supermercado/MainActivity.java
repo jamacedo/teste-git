@@ -12,12 +12,12 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
+public class MainActivity extends AppCompatActivity{
 
     private Toolbar mToolbar;
-    private ItemListadoAdapter mAdapter;
     private ListView listComprados;
     public ArrayList<Item> compras;
+    private ItemListadoAdapter mAdapter;
     Button button;
 
     @Override
@@ -33,8 +33,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         button = (Button) findViewById(R.id.buttonStart);
         mAdapter = new ItemListadoAdapter(MainActivity.this, compras);
 
-        //listComprados.setOnItemClickListener(this);
-
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,21 +40,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 startActivityForResult(i, 1);
             }
         });
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Item item = (Item) listComprados.getItemAtPosition(position);
-        if(!(item.isSelected())) {
-            item.setSelected(true);
-            compras.remove(position);
-            compras.add(item);
-        }else{
-            item.setSelected(false);
-            compras.remove(position);
-            compras.add(getPositionSeparador(),item);
-        }
-        listComprados.setAdapter(new ItemListadoAdapter(MainActivity.this, compras));
     }
 
     @Override
@@ -78,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 if(!isInsideCompras("")) {
                     compras.add(new Item("", 1));
                 }
-                listComprados.setAdapter(new ItemListadoAdapter(MainActivity.this, compras));
+                listComprados.setAdapter(mAdapter);
             }
         }
     }
@@ -90,6 +73,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         }
         return false;
+    }
+    /*
+    FUNCAO ONCLICK:
+    refreshActivity apenas atualiza o adapter na listView.
+    Essa parte não está otimizada. Toda a vez que eu clicar no checkbox ele chamará o adapter
+    para a listView e isso pode ser custoso caso hajam vários itens.
+     */
+
+    public void refreshActivity(View v){
+        listComprados.setAdapter(mAdapter);
     }
 
     public int getPositionSeparador(){

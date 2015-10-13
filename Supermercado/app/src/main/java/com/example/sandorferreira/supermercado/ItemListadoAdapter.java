@@ -11,6 +11,7 @@ import android.widget.Adapter;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,12 +24,9 @@ import java.util.TreeSet;
 public class ItemListadoAdapter extends BaseAdapter{
 
     private static final int TYPE_ITEM = 0;
-    private static final int TYPE_SEPARATOR = 1;
 
     LayoutInflater layoutInflater;
     ArrayList<Item> itens;
-    private TreeSet<Integer> mSectionHeader = new TreeSet<>();
-
 
     public ItemListadoAdapter(Context context, ArrayList<Item> itens){
         super();
@@ -39,11 +37,6 @@ public class ItemListadoAdapter extends BaseAdapter{
     @Override
     public int getViewTypeCount() {
         return itens.size();
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return mSectionHeader.contains(position) ? TYPE_SEPARATOR : TYPE_ITEM;
     }
 
     @Override
@@ -61,7 +54,7 @@ public class ItemListadoAdapter extends BaseAdapter{
         return itens.get(position);
     }
 
-    //ViewHolder holder = null;
+
     @Override
     public View getView(final int position, final View convertView, final ViewGroup parent) {
         ViewHolder holder;
@@ -70,35 +63,52 @@ public class ItemListadoAdapter extends BaseAdapter{
         boolean isSelected = itens.get(position).isSelected();
         if((v==null) || v.getTag() == null){
             holder = new ViewHolder();
-            switch (type) {
-                case 0:
-                    v = layoutInflater.inflate(R.layout.item_lista_comprado, null);
-                    holder.nomeProduto = (TextView) v.findViewById(R.id.tvNomeComprado);
-                    holder.checkBox = (CheckBox) v.findViewById(R.id.checkBoxItem);
-                    holder.nomeProduto.setText(itens.get(position).getNomeProduto());
-                    holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                            if(isChecked){
-                                Item item = itens.get(position);
-                                item.setSelected(true);
-                                // colocar notifyDataSetChanged aqui <<<<
-                            }
-                        }
-                    });
-                    if(isSelected) {
+            if(type==TYPE_ITEM){
+                /*
+                TYPE_ITEM é o tipo que não será inflado como um separador e sim como um produto
+                pertencente ao supermercado. Seu else definirá o layout a ser inflado caso seja
+                um separador
+                */
+
+                v = layoutInflater.inflate(R.layout.item_lista_comprado, null);
+                holder.nomeProduto = (TextView) v.findViewById(R.id.tvNomeComprado);
+                holder.checkBox = (CheckBox) v.findViewById(R.id.checkBoxItem);
+                holder.nomeProduto.setText(itens.get(position).getNomeProduto());
+                if(isSelected){
+                    /*
+                    isSelected parâmetro do tipo Boolean da classe Item. True se está comprado e false
+                    se ainda nao foi comprado. Dependendo do isSelected, o layout irá mudar (texto marcado
+                    e checkbox selecionado).
+                     */
+                    holder.checkBox.setChecked(true);
+                    holder.nomeProduto.setTextColor(Color.GRAY);
+                    holder.nomeProduto.setPaintFlags(holder.nomeProduto.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                }
+                /*
+                FORA DO IF ACIMA.
+                Esteja o item selecionado ou não, o usuário tem que ter a opção de mudar seu estado, logo
+                o checkbox recebe os parâmetros do item e checa qual seu estado. Se o checkbox estiver checkado
+                ele automaticamente muda o estado de isSelected para comprado(true). O CheckBox conta com
+                uma função definida no proprio layout (onClick no XML) que atualiza o adapter (funcao está em
+                MainActivity)
+                 */
+                holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         Item item = itens.get(position);
-                        //holder.checkBox.setChecked(true);
-                        holder.nomeProduto.setTextColor(Color.GRAY);
-                        holder.nomeProduto.setPaintFlags(holder.nomeProduto.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                        itens.remove(position);
-                        itens.add(item);
-                        //notifyDataSetChanged();
+                        if(isChecked) {
+                            item.setSelected(true);
+                            itens.remove(position);
+                            itens.add(item);
+                        }else{
+                            item.setSelected(false);
+                            itens.remove(position);
+                            itens.add(getPositionSeparador(),item);
+                        }
                     }
-                    break;
-                default:
-                    v = layoutInflater.inflate(R.layout.separator,null);
-                    break;
+                });
+            }else{
+                v = layoutInflater.inflate(R.layout.separator,null);
             }
             v.setTag(holder);
         }else{
@@ -107,6 +117,10 @@ public class ItemListadoAdapter extends BaseAdapter{
         v.setTag(holder);
         return v;
     }
+
+    /*
+    Pega a posiçao do separador para adicionar após ele
+     */
 
     public int getPositionSeparador(){
         int i;
@@ -127,12 +141,6 @@ public class ItemListadoAdapter extends BaseAdapter{
     public class ViewHolder{
         TextView nomeProduto;
         CheckBox checkBox;
-    }
-
-
-    public void refresh(ArrayList<Item> itens){
-        this.itens = itens;
-        notifyDataSetChanged();
     }
 
 }
