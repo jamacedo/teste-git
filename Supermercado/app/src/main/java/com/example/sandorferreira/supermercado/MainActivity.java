@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         button = (Button) findViewById(R.id.buttonStart);
         mAdapter = new ItemListadoAdapter(MainActivity.this, compras);
 
-        listComprados.setOnItemClickListener(this);
+        //listComprados.setOnItemClickListener(this);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,8 +47,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Item item = (Item) listComprados.getItemAtPosition(position);
-        compras.remove(position);
-        compras.add(item);
+        if(!(item.isSelected())) {
+            item.setSelected(true);
+            compras.remove(position);
+            compras.add(item);
+        }else{
+            item.setSelected(false);
+            compras.remove(position);
+            compras.add(getPositionSeparador(),item);
+        }
         listComprados.setAdapter(new ItemListadoAdapter(MainActivity.this, compras));
     }
 
@@ -86,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     public int getPositionSeparador(){
-        int i = 0;
+        int i;
         for(i=0;i<compras.size();i++){
             if(compras.get(i).getIsSeparator()==1){
                 return i;

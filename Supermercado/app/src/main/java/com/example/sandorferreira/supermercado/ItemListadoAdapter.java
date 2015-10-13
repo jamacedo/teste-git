@@ -1,10 +1,13 @@
 package com.example.sandorferreira.supermercado;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -17,15 +20,13 @@ import java.util.TreeSet;
 /**
  * Created by sandorferreira on 02/10/15.
  */
-public class ItemListadoAdapter extends BaseAdapter {
+public class ItemListadoAdapter extends BaseAdapter{
 
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_SEPARATOR = 1;
 
     LayoutInflater layoutInflater;
     ArrayList<Item> itens;
-    ArrayList<Item> itensCompArados;
-    ArrayList<Item> orig;
     private TreeSet<Integer> mSectionHeader = new TreeSet<>();
 
 
@@ -40,52 +41,9 @@ public class ItemListadoAdapter extends BaseAdapter {
         return itens.size();
     }
 
-
-    public void addItem(Item item){
-        itens.add(item);
-    }
-
-    public void addSectionHeader(Item item){
-        itens.add(item);
-        mSectionHeader.add(itens.size()-1);
-        notifyDataSetChanged();
-    }
-
     @Override
     public int getItemViewType(int position) {
         return mSectionHeader.contains(position) ? TYPE_SEPARATOR : TYPE_ITEM;
-    }
-
-
-    public android.widget.Filter getFilter(){
-        return new android.widget.Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
-                final FilterResults oReturn = new FilterResults();
-                final ArrayList<Item> results = new ArrayList<Item>();
-                if(orig==null){
-                    orig = itens;}
-                if(constraint != null){
-                    if(orig!= null && orig.size() > 0){
-                        for(final Item item : orig){
-                            if(item.getNomeProduto().toLowerCase().contains(constraint.toString())){
-                                results.add(item);
-                            }
-                        }
-                        oReturn.values = results;
-                    }
-                }
-                return oReturn;
-            }
-
-            @SuppressWarnings("unchecked")
-            @Override
-            protected void publishResults(CharSequence constraint, FilterResults results) {
-                itens = (ArrayList<Item>) results.values;
-                notifyDataSetChanged();
-
-            }
-        };
     }
 
     @Override
@@ -103,20 +61,40 @@ public class ItemListadoAdapter extends BaseAdapter {
         return itens.get(position);
     }
 
+    //ViewHolder holder = null;
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
+    public View getView(final int position, final View convertView, final ViewGroup parent) {
+        ViewHolder holder;
         View v = convertView;
         int type = itens.get(position).getIsSeparator();
+        boolean isSelected = itens.get(position).isSelected();
         if((v==null) || v.getTag() == null){
             holder = new ViewHolder();
             switch (type) {
                 case 0:
                     v = layoutInflater.inflate(R.layout.item_lista_comprado, null);
-                    //holder = new ViewHolder();
                     holder.nomeProduto = (TextView) v.findViewById(R.id.tvNomeComprado);
                     holder.checkBox = (CheckBox) v.findViewById(R.id.checkBoxItem);
                     holder.nomeProduto.setText(itens.get(position).getNomeProduto());
+                    holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                            if(isChecked){
+                                Item item = itens.get(position);
+                                item.setSelected(true);
+                                // colocar notifyDataSetChanged aqui <<<<
+                            }
+                        }
+                    });
+                    if(isSelected) {
+                        Item item = itens.get(position);
+                        //holder.checkBox.setChecked(true);
+                        holder.nomeProduto.setTextColor(Color.GRAY);
+                        holder.nomeProduto.setPaintFlags(holder.nomeProduto.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                        itens.remove(position);
+                        itens.add(item);
+                        //notifyDataSetChanged();
+                    }
                     break;
                 default:
                     v = layoutInflater.inflate(R.layout.separator,null);
@@ -126,10 +104,18 @@ public class ItemListadoAdapter extends BaseAdapter {
         }else{
             holder = (ViewHolder) v.getTag();
         }
-        //holder = new ViewHolder();
-
         v.setTag(holder);
         return v;
+    }
+
+    public int getPositionSeparador(){
+        int i;
+        for(i=0;i<itens.size();i++){
+            if(itens.get(i).getIsSeparator()==1){
+                return i;
+            }
+        }
+        return i;
     }
 
 
@@ -141,6 +127,12 @@ public class ItemListadoAdapter extends BaseAdapter {
     public class ViewHolder{
         TextView nomeProduto;
         CheckBox checkBox;
+    }
+
+
+    public void refresh(ArrayList<Item> itens){
+        this.itens = itens;
+        notifyDataSetChanged();
     }
 
 }

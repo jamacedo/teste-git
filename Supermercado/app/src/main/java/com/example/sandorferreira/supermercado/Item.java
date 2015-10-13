@@ -10,7 +10,7 @@ import java.io.Serializable;
  */
 public class Item{
     private String nomeProduto;
-    private boolean selected;
+    private boolean selected = false;
     private int isSeparator;
 
     public int getIsSeparator() {
