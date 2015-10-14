@@ -83,6 +83,8 @@ public class ItemListadoAdapter extends BaseAdapter{
                     holder.checkBox.setChecked(true);
                     holder.nomeProduto.setTextColor(Color.GRAY);
                     holder.nomeProduto.setPaintFlags(holder.nomeProduto.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                }else{
+                    holder.checkBox.setChecked(false);
                 }
                 /*
                 FORA DO IF ACIMA.
